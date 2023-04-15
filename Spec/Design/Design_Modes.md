@@ -16,7 +16,7 @@
 # Type SII_MODES_Mode_t
 
 - Ref : b001 (Specification.md)
-- Input : `SII_MODES_Mode_t`
+- Input :
 - Output :
 
 ```
@@ -39,21 +39,21 @@ else if sii_modes_mode == MODE_ITERATE
 # Function SII_MODES_Loop()
 
 - Ref : b001 b002 b003 b004 (Specification.md)
-- Input : `sii_morse_message`
+- Input : `sii_morse_morseMessage`
 - Output :
 
 ```
-SII_MORSE_DisplayMessage(sii_morse_message)
+SII_MORSE_MorseSignal(sii_morse_morseMessage)
 ```
 
 # Function SII_MODES_Iterate()
 
 - Ref : b001 b002 b003 b004 (Specification.md)
-- Input : `sii_morse_message` , `sii_morse_iterateCounter`
+- Input : `sii_morse_morseMessage` , `SII_MORSE_Data.iterate`
 - Output :
 
 ```
 if sii_morse_iterateCounter is >= 1 and <= 255
-|   SII_MORSE_DisplayMessage(sii_morse_message)
-|   sii_morse_iterateCounter--
+|   SII_MORSE_MorseSignal(sii_morse_morseMessage)
+|   SII_MORSE_Data.iterate--
 ```

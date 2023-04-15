@@ -15,12 +15,13 @@ Mini-projet Morse
 
 # Exigences A - General
 
-| id   | version | description                                                                       |
-|------|---------|-----------------------------------------------------------------------------------|
-| a001 | v1.0    | 2 unites, un PC et une carte STM32 Nucleo-F103RBT6                                |
-| a002 | v1.0    | Communication entre les 2 unites via protocole UART                               |
-| a003 | v1.0    | Le PC doit transmettre un message vers la carte                                   |
-| a004 | v1.0    | La carte doit transcrire le message recu en MORSE a l'aide de la LED built-in PA5 |
+| id   | version | description                                                                 |
+|------|---------|-----------------------------------------------------------------------------|
+| a001 | v1.0    | 2 unites, un PC et une carte STM32 Nucleo-F103RBT6                          |
+| a002 | v1.0    | Communication entre les 2 unites via protocole UART                         |
+| a003 | v1.0    | Le PC doit transmettre un message vers la carte                             |
+| a004 | v1.0    | La carte doit traduire le message recu en MORSE                             |
+| a005 | v1.0    | La carte doit transcrire le message traduit a l'aide de la LED built-in PA5 |
 
 # Exigences B - Modes
 
