@@ -8,8 +8,8 @@ Mini-projet Morse
 - [SPECIFICATION](#specification)
 - [TABLE DES MATIERES](#table-des-matieres)
 - [Exigences A - General](#exigences-a---general)
-- [Exigences C - Modes](#exigences-c---modes)
-- [Exigences B - Commande PC](#exigences-b---commande-pc)
+- [Exigences B - Modes](#exigences-b---modes)
+- [Exigences C - Commande PC](#exigences-c---commande-pc)
 - [Exigences D - Erreurs](#exigences-d---erreurs)
 - [Exigences E - Trame](#exigences-e---trame)
 
@@ -22,7 +22,7 @@ Mini-projet Morse
 | a003 | v1.0    | Le PC doit transmettre un message vers la carte                                   |
 | a004 | v1.0    | La carte doit transcrire le message recu en MORSE a l'aide de la LED built-in PA5 |
 
-# Exigences C - Modes
+# Exigences B - Modes
 
 | id   | version | description                                                                                           |
 |------|---------|-------------------------------------------------------------------------------------------------------|
@@ -31,7 +31,7 @@ Mini-projet Morse
 | b003 | v1.0    | Le mode `nombre` fait repeter la transcription morse un nombre de fois renseigne avec l'argument `-n` |
 | b004 | v1.0    | Les modes `boucle` et `nombre` ne peuvent etre utilises ensembles                                     |
 
-# Exigences B - Commande PC
+# Exigences C - Commande PC
 
 | id   | version | description                                                                                                      |
 |------|---------|------------------------------------------------------------------------------------------------------------------|
@@ -58,7 +58,7 @@ La trame doit respecter le format suivant.
 |          1           |       1       |          1          |          1           |          1           |         1         |         N          |  1   |
 |:--------------------:|:-------------:|:-------------------:|:--------------------:|:--------------------:|:-----------------:|:------------------:|:----:|
 |     Mode Boucle      | Nb Iterations |       Timer1        |        Timer2        |        Timer3        | Nombre de lettres | Lettres du Message | '\n' |
-| 0=desactive 1=Active |     0-255     | centieme de seconde | centieme de secondes | centieme de secondes |       0-255       |    249 char max    | '\n' |
+| 0=desactive 1=Active |     1-255     | centieme de seconde | centieme de secondes | centieme de secondes |       0-255       |    249 char max    | '\n' |
 
 **Exigence e002 :**
 
