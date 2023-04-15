@@ -10,8 +10,8 @@
 - [Type SII\_MORSE\_Data\_t](#type-sii_morse_data_t)
 - [Function SII\_MORSE\_CharToMorse()](#function-sii_morse_chartomorse)
 - [Function SII\_MORSE\_MessageToMorse()](#function-sii_morse_messagetomorse)
-- [Function SII\_MORSE\_MorseSignalOutput()](#function-sii_morse_morsesignaloutput)
-- [Function SII\_MORSE\_MorseSignalCharacter()](#function-sii_morse_morsesignalcharacter)
+- [Function SII\_MORSE\_SignalOutput()](#function-sii_morse_signaloutput)
+- [Function SII\_MORSE\_SignalCharacter()](#function-sii_morse_signalcharacter)
 - [Function SII\_MORSE\_MorseSignal()](#function-sii_morse_morsesignal)
 
 
@@ -61,7 +61,7 @@ for_each char in SII_MORSE_Data.message
 |   sii_morse_morseMessage[i * 5] = SII_MORSE_CharToMorse(SII_MORSE_Data.message[i])
 ```
 
-# Function SII_MORSE_MorseSignalOutput()
+# Function SII_MORSE_SignalOutput()
 
 - Ref : a005 (Specification.md)
 - Input : `timer` , `output_state`
@@ -69,10 +69,10 @@ for_each char in SII_MORSE_Data.message
 
 ```
 set LED as output_state
-wait during timer counter time
+SII_TIMER_Delay(timer)
 ```
 
-# Function SII_MORSE_MorseSignalCharacter()
+# Function SII_MORSE_SignalCharacter()
 
 - Ref : a005 (Specification.md)
 - Input : `character`
@@ -80,23 +80,23 @@ wait during timer counter time
 
 ```
 if character == "     "
-|   SII_MORSE_MorseSignalOutput(Timer3, LOW)
+|   SII_MORSE_SignalOutput(Timer3, LOW)
 else
 |   for each in character
 |   |   switch(character[i])
 |   |   |   case '.'
-|   |   |   |   SII_MORSE_MorseSignalOutput(Timer1, HIGH)
+|   |   |   |   SII_MORSE_SignalOutput(Timer1, HIGH)
 |   |   |   |   break
 |   |   |   case '_'
-|   |   |   |   SII_MORSE_MorseSignalOutput(Timer2, HIGH)
+|   |   |   |   SII_MORSE_SignalOutput(Timer2, HIGH)
 |   |   |   |   break
 |   |   |   default
 |   |   |   |   return 0
 |   |   if i < 4
 |   |   |   if character[i+1] == ( "." or "_" )
-|   |   |   |   SII_MORSE_MorseSignalOutput(Timer1, LOW)
+|   |   |   |   SII_MORSE_SignalOutput(Timer1, LOW)
 |   |   |   else
-|   |   |   |   SII_MORSE_MorseSignalOutput(Timer2, LOW)
+|   |   |   |   SII_MORSE_SignalOutput(Timer2, LOW)
 ```
 
 # Function SII_MORSE_MorseSignal()
@@ -107,5 +107,5 @@ else
 
 ```
 for each in sii_morse_morseMessage
-|   SII_MORSE_MorseSignalCharacter(sii_morse_morseMessage[i])
+|   SII_MORSE_SignalCharacter(sii_morse_morseMessage[i])
 ```
