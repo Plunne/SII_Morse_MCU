@@ -7,13 +7,13 @@ Mini-projet Morse
 # TABLE DES MATIERES
 - [SPECIFICATION](#specification)
 - [TABLE DES MATIERES](#table-des-matieres)
-- [Exigences A - General](#exigences-a---general)
+- [Exigences A - Main](#exigences-a---main)
 - [Exigences B - Modes](#exigences-b---modes)
 - [Exigences C - Commande PC](#exigences-c---commande-pc)
 - [Exigences D - Erreurs](#exigences-d---erreurs)
 - [Exigences E - Trame](#exigences-e---trame)
 
-# Exigences A - General
+# Exigences A - Main
 
 | id   | version | description                                                                 |
 |------|---------|-----------------------------------------------------------------------------|
