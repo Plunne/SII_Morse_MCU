@@ -18,9 +18,9 @@
 - Output :
 
 ```
+receive UART into SII_MORSE_Data with interrupt
+
 while(1)
-|   receive UART into SII_MORSE_Data with interrupt
-|
 |   sii_morse_message = SII_MORSE_MessageToMorse(SII_MORSE_Data.message)
 |   transmit UART to PC sii_morse_message
 |
