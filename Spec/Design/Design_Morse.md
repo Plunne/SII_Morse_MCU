@@ -53,12 +53,12 @@ return 0
 # Function SII_MORSE_MessageToMorse()
 
 - Ref : a004 (Specification.md)
-- Input : `sii_morse_morseMessage` , `SII_MORSE_Data.message`
+- Input : `sii_morse_message` , `SII_MORSE_Data.message`
 - Output :
 
 ```
 for_each char in SII_MORSE_Data.message
-|   sii_morse_morseMessage[i * 5] = SII_MORSE_CharToMorse(SII_MORSE_Data.message[i])
+|   sii_morse_message[i * 5] = SII_MORSE_CharToMorse(SII_MORSE_Data.message[i])
 ```
 
 # Function SII_MORSE_SignalOutput()
@@ -102,10 +102,10 @@ else
 # Function SII_MORSE_MorseSignal()
 
 - Ref : a005 (Specification.md)
-- Input : `sii_morse_morseMessage`
+- Input : `sii_morse_message`
 - Output :
 
 ```
-for each in sii_morse_morseMessage
-|   SII_MORSE_SignalCharacter(sii_morse_morseMessage[i])
+for each in sii_morse_message
+|   SII_MORSE_SignalCharacter(sii_morse_message[i])
 ```
