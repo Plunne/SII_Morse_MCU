@@ -12,3 +12,9 @@ Mini-projet Morse partie micro-controleur POEI SII
 - Types : `SII_MODULE_NomType_t`
 - Enum : `SII_MODULE_NomEnum`
 - Fichiers : `sii_module.c/h`
+
+# Exemple Frame
+
+```c
+03A\x32\xFF\x05SOS  
+```
