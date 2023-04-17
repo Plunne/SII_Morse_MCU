@@ -27,6 +27,11 @@ uint8_t SII_MORSE_GetMorseChar(uint8_t letter)
 	// Scan if input letter is in the letter list
 	for (uint8_t i=0; i < NB_MORSE_CHARACTERS; i++)
 	{
+		/* Lower to Upper */
+		if ((letter >= 'a') && (letter <= 'z')) // If Lowercase
+		{
+			letter -= 32; // Convert to Uppercase
+		}
 		// If the input letter is in the letter list
 		if (letter == sii_morse_letterList[i])
 		{
