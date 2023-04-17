@@ -223,7 +223,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	if (sii_data_dataframe[rx_step] == '\n')
+	if ((rx_step > 5) && (sii_data_dataframe[rx_step] == '\n'))
 	{
 		SII_DATA_GetFrame(&SII_DATA_Data, sii_data_dataframe, rx_step);
 		SII_MORSE_MessageToMorse(&SII_DATA_Data, sii_morse_message);

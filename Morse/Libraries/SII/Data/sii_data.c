@@ -12,12 +12,12 @@ void SII_DATA_GetFrame(SII_DATA_Data_t* Data, uint8_t* frame, uint8_t size)
 {
 	if((Data != NULL) && (frame != NULL))
 	{
-		Data->loop 		= frame[0] - '0';
-		Data->iterate 	= frame[1] - '0';
+		Data->loop 		= frame[0];
+		Data->iterate 	= frame[1];
 		Data->timer1 	= frame[2];
 		Data->timer2 	= frame[3];
 		Data->timer3 	= frame[4];
-		Data->msgSize 	= frame[5] - '0';
+		Data->msgSize 	= frame[5];
 
 		// Copy frame [6 to (\n -1)] into Data->message[0 to (\n -1)]
 		for (uint8_t i=6; i < (size); i++)

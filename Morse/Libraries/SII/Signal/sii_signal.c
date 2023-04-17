@@ -29,11 +29,11 @@ void SII_SIGNAL_SignalCharacter(SII_DATA_Data_t* Data, uint8_t* morse_character)
 			switch (morse_character[i])
 			{
 			case '.':
-				HAL_UART_Transmit(Data->uart, (uint8_t *) &'.', 1, 10);
+				HAL_UART_Transmit(Data->uart, (uint8_t *) &".", 1, 10);
 				SII_SIGNAL_SignalOutput(Data->timer1, 1);	// Send a dot signal
 				break;										// Then go to next character
 			case '_':
-				HAL_UART_Transmit(Data->uart,(uint8_t *) &'_', 1, 10);
+				HAL_UART_Transmit(Data->uart,(uint8_t *) &"_", 1, 10);
 				SII_SIGNAL_SignalOutput(Data->timer2, 1);	// Send a dash signal
 				break;										// Then go to next character
 			default:
@@ -50,7 +50,7 @@ void SII_SIGNAL_SignalCharacter(SII_DATA_Data_t* Data, uint8_t* morse_character)
 				}
 				else
 				{
-					HAL_UART_Transmit(Data->uart, (uint8_t *) &' ', 1, 10);
+					HAL_UART_Transmit(Data->uart, (uint8_t *) &" ", 1, 10);
 					SII_SIGNAL_SignalOutput(Data->timer2, 0);	// Wait before next letter
 					return;										// Leave the function
 				}
