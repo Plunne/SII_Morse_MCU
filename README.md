@@ -16,5 +16,5 @@ Mini-projet Morse partie micro-controleur POEI SII
 # Exemple Frame
 
 ```c
-03A\x32\xFF\x05SOS  
+02!Az3SOS
 ```

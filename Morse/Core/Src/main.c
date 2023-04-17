@@ -43,6 +43,13 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+
+SII_DATA_Data_t SII_DATA_Data;
+SII_MODES_Mode_t SII_MODES_Mode = MODE_IDLE;
+uint8_t sii_data_dataframe[DATAFRAME_LENGHT];
+uint8_t sii_morse_message[MESSAGE_LENGHT * MORSE_CHARACTER_LENGHT];
+uint8_t rx_step = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,7 +62,6 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /**
@@ -65,12 +71,9 @@ static void MX_USART2_UART_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	SII_MORSE_Data_t SII_MORSE_Data;
-	SII_MORSE_Data.timer1 = 10;
-	SII_MORSE_Data.timer2 = 50;
-	SII_MORSE_Data.timer3 = 200;
-	SII_MORSE_Data.msgSize = 26;
-	SII_MORSE_GetMessage(&SII_MORSE_Data, (uint8_t*)"SOS SOS  SOS  SOSSOS SOSSS");
+
+	SII_DATA_Data.uart = &huart2;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -93,14 +96,17 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  	  uint8_t sii_morse_message[MESSAGE_LENGHT * MORSE_CHARACTER_LENGHT];
-  	  SII_MORSE_MessageToMorse(&SII_MORSE_Data, sii_morse_message);
+
+	HAL_UART_Receive_IT(SII_DATA_Data.uart, &sii_data_dataframe[rx_step], 1);
+
   /* USER CODE END 2 */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  SII_MORSE_MorseSignal(&SII_MORSE_Data, sii_morse_message);
+
+	  SII_MODES_RunMode(&SII_DATA_Data, sii_morse_message, SII_MODES_Mode);
+
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
   }
@@ -173,7 +179,6 @@ static void MX_USART2_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART2_Init 2 */
-
   /* USER CODE END USART2_Init 2 */
 
 }
@@ -216,7 +221,21 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if (sii_data_dataframe[rx_step] == '\n')
+	{
+		SII_DATA_GetFrame(&SII_DATA_Data, sii_data_dataframe, rx_step);
+		SII_MORSE_MessageToMorse(&SII_DATA_Data, sii_morse_message);
+		SII_MODES_Mode = SII_MODES_GetMode(&SII_DATA_Data);
+		rx_step = 0;
+	}
+	else
+	{
+		rx_step++;
+	}
+	HAL_UART_Receive_IT(&huart2, &sii_data_dataframe[rx_step], 1);
+}
 /* USER CODE END 4 */
 
 /**

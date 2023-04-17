@@ -48,6 +48,8 @@
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/SII/Morse"/>
 									<listOptionValue builtIn="false" value="../Libraries/SII/Modes"/>
+									<listOptionValue builtIn="false" value="../Libraries/SII/Data"/>
+									<listOptionValue builtIn="false" value="../Libraries/SII/Signal"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.953853299" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>

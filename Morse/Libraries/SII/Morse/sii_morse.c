@@ -21,19 +21,6 @@ uint8_t sii_morse_morseList[NB_MORSE_CHARACTERS][MORSE_CHARACTER_LENGHT] = {
 	".._  ", "..._ ", ".__  ", "_.._ ", "_.__ ", "__.. ", "     "
 };
 
-/* Init */
-void SII_MORSE_GetMessage(SII_MORSE_Data_t* Data, uint8_t* message)
-{
-	if (Data->msgSize <= MESSAGE_LENGHT)
-	{
-		for (uint8_t i=0; i < Data->msgSize; i++)
-		{
-			Data->message[i] = message[i];
-		}
-
-	}
-}
-
 /* Message to Morse */
 uint8_t SII_MORSE_GetMorseChar(uint8_t letter)
 {
@@ -58,7 +45,7 @@ void SII_MORSE_CharToMorse(uint8_t *letter, uint8_t index)
 	}
 }
 
-void SII_MORSE_MessageToMorse(SII_MORSE_Data_t* Data, uint8_t* morse)
+void SII_MORSE_MessageToMorse(SII_DATA_Data_t* Data, uint8_t* morse)
 {
 	if ((Data->message != NULL) && (morse != NULL))
 	{
@@ -70,59 +57,3 @@ void SII_MORSE_MessageToMorse(SII_MORSE_Data_t* Data, uint8_t* morse)
 	}
 }
 
-/* Signal */
-void SII_MORSE_SignalOutput(uint32_t timer, uint8_t output_state)
-{
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, output_state);
-	HAL_Delay(timer * 10);
-}
-
-void SII_MORSE_SignalCharacter(SII_MORSE_Data_t* Data, uint8_t* morse_character)
-{
-	// If the letter is a space
-	if (morse_character[0] == ' ')
-	{
-		SII_MORSE_SignalOutput(Data->timer3, 0); // Wait before next letter
-	}
-	else
-	{
-		for (uint8_t i=0; i < MORSE_CHARACTER_LENGHT; i++)
-		{
-			// Send character LED signal
-			switch (morse_character[i])
-			{
-			case '.':
-				SII_MORSE_SignalOutput(Data->timer1, 1);	// Send a dot signal
-				break;										// Then go to next character
-			case '_':
-				SII_MORSE_SignalOutput(Data->timer2, 1);	// Send a dash signal
-				break;										// Then go to next character
-			default:
-				return;	// Leave the function
-			}
-
-			// If next character isn't the last
-			if (i < (MORSE_CHARACTER_LENGHT - 2))
-			{
-				// If next character is a dot or a dash
-				if ((morse_character[i+1] == '.') || (morse_character[i+1] == '_'))
-				{
-					SII_MORSE_SignalOutput(Data->timer1, 0);	// Wait before next symbol of the same letter
-				}
-				else
-				{
-					SII_MORSE_SignalOutput(Data->timer2, 0);	// Wait before next letter
-					return;										// Leave the function
-				}
-			}
-		}
-	}
-}
-
-void SII_MORSE_MorseSignal(SII_MORSE_Data_t* Data, uint8_t* morse)
-{
-	for (uint8_t i=0; i < Data->msgSize; i++)
-	{
-		SII_MORSE_SignalCharacter(Data, &morse[i * MORSE_CHARACTER_LENGHT]);
-	}
-}
