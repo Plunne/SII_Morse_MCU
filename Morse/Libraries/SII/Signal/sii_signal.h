@@ -9,6 +9,10 @@
 #define SII_SIGNAL_SII_SIGNAL_H_
 
 #include "sii_morse.h"
+#include "sii_timers.h"
+
+#define SII_SIGNAL_LED_Port		GPIOA
+#define SII_SIGNAL_LED_Pin		GPIO_PIN_5
 
 void SII_SIGNAL_SignalOutput(uint32_t timer, uint8_t output_state);
 void SII_SIGNAL_SignalCharacter(SII_DATA_Data_t* Data, uint8_t* morse_character);

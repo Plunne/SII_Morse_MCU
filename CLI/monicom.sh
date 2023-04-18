@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DEV=/dev/ttyACM0
+DEV=/dev/ttyS7
 SPEED=9600
 
 stty -F $DEV speed $SPEED cs8

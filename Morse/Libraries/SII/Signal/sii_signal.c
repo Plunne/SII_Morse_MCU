@@ -9,8 +9,8 @@
 
 void SII_SIGNAL_SignalOutput(uint32_t timer, uint8_t output_state)
 {
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, output_state);
-	HAL_Delay(timer * 10);
+	HAL_GPIO_WritePin(SII_SIGNAL_LED_Port, SII_SIGNAL_LED_Pin, output_state);
+	SII_TIMERS_Delays_ms(&htim2, timer * 10);
 }
 
 void SII_SIGNAL_SignalCharacter(SII_DATA_Data_t* Data, uint8_t* morse_character)

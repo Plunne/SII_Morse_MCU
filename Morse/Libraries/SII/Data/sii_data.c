@@ -12,6 +12,7 @@ void SII_DATA_GetFrame(SII_DATA_Data_t* Data, uint8_t* frame, uint8_t size)
 {
 	if((Data != NULL) && (frame != NULL))
 	{
+		// Data settings
 		Data->loop 		= frame[0];
 		Data->iterate 	= frame[1];
 		Data->timer1 	= frame[2];

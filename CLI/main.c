@@ -22,7 +22,7 @@ void main (int argc, char **argv) {
      *     Init UART     *
      *********************/
 
-    int serial_port = open("/dev/ttyACM0", O_RDWR);
+    int serial_port = open("/dev/ttyS7", O_RDWR);
 
     // Check for errors
     if (serial_port < 0) {
@@ -98,29 +98,33 @@ void main (int argc, char **argv) {
 					exit(2);
 				} else {
 					strcpy(message, optarg);
-                    message_size = strlen(message);
+					message_size = strlen(message);
                     msg_size = strlen(message) + 7;
 				}
 				break;
 
 			case 'b':
 				messageLoopFlag |= (1 << 0);
-                break;
+				break;
 
 			case 'n':
 				messageLoopFlag |= (1 << 1);
 				messageNumber = atoi(strtok(optarg, " "));
-                break;
+				break;
 
 			// Timers
-         	case 't':
+			case 't':
 				timer1_ms = atoi(strtok(optarg, " "));
 				timer2_ms = atoi(strtok(NULL, " "));
 				timer3_ms = atoi(strtok(NULL, " "));
-
 				printf("Temps définis : court = %dms, moyen = %dms, long = %dms.\n", timer1_ms, timer2_ms, timer3_ms);
-
-                		break;
+                break;
+            
+            // Stop
+            case 's':
+				messageLoopFlag &= ~(1 << 0);
+				messageLoopFlag &= ~(1 << 1);
+				break;
 
 			// Help
             		case 'h':
@@ -142,7 +146,7 @@ void main (int argc, char **argv) {
     unsigned char *msg = (unsigned char *) malloc((7 + msg_size) * sizeof(unsigned char));
 	
     /* If message is empty */
-	if (strcmp(message, "") == 0) {
+	if ((messageLoopFlag) && (strcmp(message, "") == 0)) {
 
 		printf("Précisez un message '-m' ou envoyez la commande stop '-s'. Option '-h' pour l'aide.\n");
 		exit(0);
@@ -164,6 +168,16 @@ void main (int argc, char **argv) {
 			printf("Nombre d'interations : %d\n", messageNumber);
             msg[1] = messageNumber;
 
+		} else if (!messageLoopFlag) {
+			
+			/* Iterations : -n */			
+			printf("Arret de la diffusion.\n");
+            message_size = 0;
+            msg_size = 7;
+            msg[0] = 0;
+            msg[1] = 0;
+            msg[6] = '\n';
+
 		} else {
 
             /* Options conflict (-b && -n) */
@@ -171,24 +185,28 @@ void main (int argc, char **argv) {
         }
 	}   
 
-    /* Setup Timers */
-    msg[2] = timer1_ms;
-    msg[3] = timer2_ms;
-    msg[4] = timer3_ms;
-    msg[5] = message_size;
+    if (messageLoopFlag) {
 
-    /* Iterator for copy starts after settings cases */
-    int i=6;
-    
-    /* Paste message chars into msg at + 6 */
-    for (; i < (message_size + 6); i++) {
-        msg[i] = message[i-6]; // msg[6] = message[0]
-        printf("Lettre i (%d) : %c\n", i, msg[i]);
+        /* Setup Timers */
+        msg[2] = timer1_ms;
+        msg[3] = timer2_ms;
+        msg[4] = timer3_ms;
+        msg[5] = message_size;
+
+        /* Iterator for copy starts after settings cases */
+        int i=6;
+        
+        /* Paste message chars into msg at + 6 */
+        for (; i < (message_size + 6); i++) {
+            msg[i] = message[i-6]; // msg[6] = message[0]
+            printf("Lettre i (%d) : %c\n", i, msg[i]);
+        }
+
+        /* Last char (\n) */
+        msg[i] = '\n';
+        printf("Lettre i (%d) fin : %d\n", i, msg[i]);
+
     }
-
-    /* Last char (\n) */
-    msg[i] = '\n';
-    printf("Lettre i (%d) fin : %d\n", i, msg[i]);
 
     /* Write to UART*/
     printf("Sizeof msg : %d\n", msg_size);
