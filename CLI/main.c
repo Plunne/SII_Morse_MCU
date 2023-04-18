@@ -15,6 +15,10 @@
 /* pour la gestion des erreurs */
 #include <errno.h>
 
+#define MESSAGE_FLAG_LOOP       0
+#define MESSAGE_FLAG_ITERATE    1
+#define MESSAGE_FLAG_STOP       2
+
 
 void main (int argc, char **argv) {
 
@@ -77,9 +81,9 @@ void main (int argc, char **argv) {
 	extern char *optarg;
 	extern int optind;
 
-	char timer1_ms = 10; 
-	char timer2_ms = 50; 
-	char timer3_ms = 100;
+	unsigned char timer1_ms = 10; 
+	unsigned char timer2_ms = 50; 
+	unsigned char timer3_ms = 100;
 
 	unsigned char message[256] = "";
     unsigned char message_size = 0;
@@ -91,6 +95,20 @@ void main (int argc, char **argv) {
 
 	while ((c = getopt(argc, argv, "t:n:bhm:s")) != -1) {
 		switch (c) {
+			// Help
+            case 'h':
+            default:
+				printf("Utilisation du programme :\n");
+				printf("-h : affiche l'aide\n");
+				printf("-s : stop le programme\n");
+				printf("-m \"xxx\" : message à envoyer\n");
+				printf("-t \"# # #\" : configure les timers avec les temps indiqués\n");
+				printf("-b : message affiché en morse en boucle\n");
+				printf("-n # : message affiché en morse n-fois\n");
+
+				exit(1) ;
+				break;
+
 			// Message
 			case 'm':
 				if(strlen(optarg) > 256) {
@@ -104,11 +122,11 @@ void main (int argc, char **argv) {
 				break;
 
 			case 'b':
-				messageLoopFlag |= (1 << 0);
+				messageLoopFlag |= (1 << MESSAGE_FLAG_LOOP);
 				break;
 
 			case 'n':
-				messageLoopFlag |= (1 << 1);
+				messageLoopFlag |= (1 << MESSAGE_FLAG_ITERATE);
 				messageNumber = atoi(strtok(optarg, " "));
 				break;
 
@@ -122,22 +140,7 @@ void main (int argc, char **argv) {
             
             // Stop
             case 's':
-				messageLoopFlag &= ~(1 << 0);
-				messageLoopFlag &= ~(1 << 1);
-				break;
-
-			// Help
-            		case 'h':
-            		default:
-				printf("Utilisation du programme :\n");
-				printf("-h : affiche l'aide\n");
-				printf("-s : stop le programme\n");
-				printf("-m \"xxx\" : message à envoyer\n");
-				printf("-t \"# # #\" : configure les timers avec les temps indiqués\n");
-				printf("-b : message affiché en morse en boucle\n");
-				printf("-n # : message affiché en morse n-fois\n");
-
-				exit(1) ;
+				messageLoopFlag |= (1 << MESSAGE_FLAG_STOP);
 				break;
 		}
 	} 
@@ -146,7 +149,7 @@ void main (int argc, char **argv) {
     unsigned char *msg = (unsigned char *) malloc((7 + msg_size) * sizeof(unsigned char));
 	
     /* If message is empty */
-	if ((messageLoopFlag) && (strcmp(message, "") == 0)) {
+	if ((!(messageLoopFlag & 4)) && (strcmp(message, "") == 0)) {
 
 		printf("Précisez un message '-m' ou envoyez la commande stop '-s'. Option '-h' pour l'aide.\n");
 		exit(0);
@@ -168,7 +171,13 @@ void main (int argc, char **argv) {
 			printf("Nombre d'interations : %d\n", messageNumber);
             msg[1] = messageNumber;
 
-		} else if (!messageLoopFlag) {
+		} else if ((!(messageLoopFlag & 1)) && (!(messageLoopFlag & 2)) && (!(messageLoopFlag & 4))) {
+			
+			/* Iterations : -n */			
+			printf("Nombre d'interations : %d\n", messageNumber);
+            msg[1] = messageNumber;
+
+		} else if (messageLoopFlag & 4) {
 			
 			/* Iterations : -n */			
 			printf("Arret de la diffusion.\n");
@@ -185,7 +194,7 @@ void main (int argc, char **argv) {
         }
 	}   
 
-    if (messageLoopFlag) {
+    if (!(messageLoopFlag & 4)) {
 
         /* Setup Timers */
         msg[2] = timer1_ms;
