@@ -13,8 +13,8 @@
 
 # Function SII_TIMERS_Delays_ms
 - Ref : a005 (Specification.md)
-- Input : 'timer_ms'
-- Output : 'Delay'
+- Input : `timer_ms`
+- Output : `Delay`
 
 ```
 while timer_ms > 0
@@ -26,8 +26,8 @@ while timer_ms > 0
 
 # Function SII_TIMERS_Blink_Led
 - Ref : a005 (Specification.md)
-- Input : 'timer_ms'
-- Output : 'LED' 'Delay'
+- Input : `timer_ms`
+- Output : `LED` `Delay`
 
 ```
 set LED as output_state
