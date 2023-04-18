@@ -15,9 +15,9 @@
 /* pour la gestion des erreurs */
 #include <errno.h>
 
-#define MESSAGE_FLAG_LOOP       0
-#define MESSAGE_FLAG_ITERATE    1
-#define MESSAGE_FLAG_STOP       2
+#define MESSAGE_FLAG_LOOP       (1 << 0)
+#define MESSAGE_FLAG_ITERATE    (1 << 1)
+#define MESSAGE_FLAG_STOP       (1 << 2)
 
 
 void main (int argc, char **argv) {
@@ -122,11 +122,11 @@ void main (int argc, char **argv) {
 				break;
 
 			case 'b':
-				messageLoopFlag |= (1 << MESSAGE_FLAG_LOOP);
+				messageLoopFlag |= MESSAGE_FLAG_LOOP;
 				break;
 
 			case 'n':
-				messageLoopFlag |= (1 << MESSAGE_FLAG_ITERATE);
+				messageLoopFlag |= MESSAGE_FLAG_ITERATE;
 				messageNumber = atoi(strtok(optarg, " "));
 				break;
 
@@ -140,7 +140,7 @@ void main (int argc, char **argv) {
             
             // Stop
             case 's':
-				messageLoopFlag |= (1 << MESSAGE_FLAG_STOP);
+				messageLoopFlag |= MESSAGE_FLAG_STOP;
 				break;
 		}
 	} 
@@ -160,24 +160,24 @@ void main (int argc, char **argv) {
 		printf("Message : %s\n", message);
 
 		/* Option -b or -n */
-		if ((messageLoopFlag & 1) && !(messageLoopFlag & 2)) {
+		if ((messageLoopFlag & MESSAGE_FLAG_LOOP) && (!(messageLoopFlag & MESSAGE_FLAG_ITERATE)) && (!(messageLoopFlag & MESSAGE_FLAG_STOP))) {
 			
-			printf("Mode boucle : %d\n", (messageLoopFlag & 1));
-            msg[0] = messageLoopFlag & 1;
+			printf("Mode boucle : %d\n", (messageLoopFlag & MESSAGE_FLAG_LOOP));
+            msg[0] = messageLoopFlag & MESSAGE_FLAG_LOOP;
 
-		} else if ((messageLoopFlag & 2) && !(messageLoopFlag & 1)) {
-			
-			/* Iterations : -n */			
-			printf("Nombre d'interations : %d\n", messageNumber);
-            msg[1] = messageNumber;
-
-		} else if ((!(messageLoopFlag & 1)) && (!(messageLoopFlag & 2)) && (!(messageLoopFlag & 4))) {
+		} else if ((messageLoopFlag & MESSAGE_FLAG_ITERATE) && (!(messageLoopFlag & MESSAGE_FLAG_LOOP)) && (!(messageLoopFlag & MESSAGE_FLAG_STOP))) {
 			
 			/* Iterations : -n */			
 			printf("Nombre d'interations : %d\n", messageNumber);
             msg[1] = messageNumber;
 
-		} else if (messageLoopFlag & 4) {
+		} else if ((!(messageLoopFlag & MESSAGE_FLAG_LOOP)) && (!(messageLoopFlag & MESSAGE_FLAG_ITERATE)) && (!(messageLoopFlag & MESSAGE_FLAG_STOP))) {
+			
+			/* Iterations : -n */			
+			printf("Nombre d'interations : %d\n", messageNumber);
+            msg[1] = messageNumber;
+
+		} else if (messageLoopFlag & MESSAGE_FLAG_STOP) {
 			
 			/* Iterations : -n */			
 			printf("Arret de la diffusion.\n");
@@ -191,10 +191,11 @@ void main (int argc, char **argv) {
 
             /* Options conflict (-b && -n) */
             printf("Erreur: L'option -n et -b ne doivent pas etre appelees en meme temps.\n");
+		    exit(0);
         }
 	}   
 
-    if (!(messageLoopFlag & 4)) {
+    if (!(messageLoopFlag & MESSAGE_FLAG_STOP)) {
 
         /* Setup Timers */
         msg[2] = timer1_ms;
